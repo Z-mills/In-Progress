@@ -1,0 +1,19 @@
+---
+- name: Check if iptables and firewalld are running
+  hosts: all
+  become: true
+  
+  tasks:
+    - name: Check if iptables is running
+      command: systemctl is-active iptables
+      register: iptables_status
+      ignore_errors: true
+      
+    - name: Check if firewalld is running
+      command: systemctl is-active firewalld
+      register: firewalld_status
+      ignore_errors: true
+      
+    - name: Display the outcome
+      debug:
+        msg: "On host {{ inventory_hostname }}, iptables is {{ iptables_status.stdout }} and firewalld is {{ firewalld_status.stdout }}"
